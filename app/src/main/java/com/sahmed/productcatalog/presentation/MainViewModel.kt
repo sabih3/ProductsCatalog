@@ -37,14 +37,20 @@ class MainViewModel @Inject constructor(): ViewModel() {
         map: HashMap<String, String>, chosenList: List<Product>) {
 
         var chosenSet = chosenList.toSet() // Products with Chosen (Filtration) Attributes
+        var of = setOf<Product>()
 
-        var masterSet = productsList.toSet() // Whole Inventory
+        var masterSet = mutableSetOf<Product>()
+        masterSet.addAll(productsList)
+
 
         val unwantedSet = masterSet.minus(chosenSet) // Subtracted Unwanted Products
 
-        val filteredSet = masterSet.minus(unwantedSet) // Filtered Set
+        //val filteredSet = masterSet.minus(unwantedSet)
 
-        if(unwantedSet.equals(masterSet)){
+        val filteredSet = masterSet.filter {// Filtered Set
+            it.equals((chosenSet as LinkedHashSet).toArray()[0])
+        }
+        if(filteredSet.equals(masterSet)){
             //No Filtration Happened
             mappedData.value = masterSet.groupBy {
                 it.brand!!

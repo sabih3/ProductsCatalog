@@ -47,6 +47,13 @@ class FilterScreen : BottomSheetDialogFragment(),CompoundButton.OnCheckedChangeL
         cb_sim.setOnCheckedChangeListener(this)
 
         apply_btn.setOnClickListener {
+            if(appleProduct.isSelected){
+                listOfProduct.add(appleProduct)
+            }
+
+            if(ericssonProduct.isSelected){
+                listOfProduct.add(ericssonProduct)
+            }
             listener.onFiltersApplied(filterMap,listOfProduct)
             this@FilterScreen.dismiss()
         }
@@ -63,6 +70,7 @@ class FilterScreen : BottomSheetDialogFragment(),CompoundButton.OnCheckedChangeL
     var listOfProduct = mutableListOf<Product>()
     var appleProduct = Product(brand = "Apple")
     var ericssonProduct = Product(brand = "Ericsson")
+    var individualProduct = Product()
     override fun onCheckedChanged(check_box: CompoundButton?, checked: Boolean) {
 
         when(checked){
@@ -75,30 +83,34 @@ class FilterScreen : BottomSheetDialogFragment(),CompoundButton.OnCheckedChangeL
                         //filterMap.put("brand",cb_apple.text.toString())
                         var product = Product(brand = cb_apple.text.toString())
                         appleProduct.isSelected = true
-                        listOfProduct.add(product)
-                        listOfProduct.add(appleProduct)
+                        //listOfProduct.add(product)
+                        //listOfProduct.add(appleProduct)
                     }
 
                     cb_erricson.id ->{
                         //filterMap.put("brand",cb_erricson.text.toString())
                         var product = Product(brand = cb_erricson.text.toString())
                         ericssonProduct.isSelected = true
-                        listOfProduct.add(ericssonProduct)
-                        listOfProduct.add(product)
+                        //listOfProduct.add(ericssonProduct)
+                        //listOfProduct.add(product)
                     }
 
                     cb_audio.id ->{
                         //filterMap.put("audioJack","Yes")
-                        var product = Product(audioJack = "Yes")
-                        appleProduct.audioJack = product.audioJack
-                        listOfProduct.add(product)
+                        individualProduct.audioJack = "Yes"
+                        appleProduct.audioJack = individualProduct.audioJack
+                        ericssonProduct.audioJack = individualProduct.audioJack
+                         if(!appleProduct.isSelected && !ericssonProduct.isSelected) listOfProduct.add(individualProduct)
+
 
                     }
 
                     cb_gps.id ->{
                         //filterMap.put("gps","Yes with A-GPS")
-                        var product = Product(gps = "Yes with A-GPS")
-                        listOfProduct.add(product)
+                        individualProduct.gps = "Yes with A-GPS"
+                        appleProduct.gps = individualProduct.gps
+                        ericssonProduct.gps = individualProduct.gps
+                        if(!appleProduct.isSelected && !ericssonProduct.isSelected) listOfProduct.add(individualProduct)
                     }
 
                     cb_sim.id ->{
@@ -111,11 +123,13 @@ class FilterScreen : BottomSheetDialogFragment(),CompoundButton.OnCheckedChangeL
                 when(check_box!!.id){
 
                     cb_apple.id ->{
-
+                        appleProduct.isSelected = false
+                        if(listOfProduct.contains(appleProduct))listOfProduct.remove(appleProduct)
                     }
 
                     cb_erricson.id ->{
-                        Log.d("","")
+                        ericssonProduct.isSelected = false
+                        if(listOfProduct.contains(ericssonProduct))listOfProduct.remove(ericssonProduct)
 
                     }
 
