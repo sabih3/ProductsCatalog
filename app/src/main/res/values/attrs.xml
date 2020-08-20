@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SearchView">
+        <attr name="toolbarTitle" format="string"/>
+        <attr name="android:text" format="string"/>
+        <attr name="showText" format="boolean"/>
+        <attr name="expanded" format="boolean"/>
+    </declare-styleable>
+</resources>
