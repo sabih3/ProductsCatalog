@@ -1,6 +1,6 @@
 package com.sahmed.productcatalog.framework.network.dto
 
-class Product(
+data class Product(
     val announceDate: String? = "",
     var audioJack: String? = "",
     val battery: String? = "",
