@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.Toolbar
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/toolbar_social_parent"
     android:layout_width="match_parent"
     android:layout_height="48dp"
@@ -75,7 +75,7 @@
                     android:layout_marginLeft="40dp"
                     android:layout_marginRight="40dp"
                     android:drawableEnd="@drawable/ic_group_568"
-                    android:textColor="#d1d1d6"/>
+                    android:textColor="@color/black"/>
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/btn_close_search"
@@ -85,6 +85,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:srcCompat="@drawable/ic_group_571"
+                    tools:visibility="visible"
 
                     />
             </androidx.constraintlayout.widget.ConstraintLayout>

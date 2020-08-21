@@ -16,6 +16,7 @@ import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider
 import com.jayway.jsonpath.spi.mapper.MappingProvider
 import com.sahmed.productcatalog.framework.network.CatalogNetworkRepository
 import com.sahmed.productcatalog.framework.network.dto.Product
+import com.sahmed.productcatalog.framework.utils.FilteringHelper
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
@@ -29,7 +30,8 @@ class MainViewModel @Inject constructor(): ViewModel() {
 
     val mappedData  = MutableLiveData<Map<String,List<Product>>>()
     lateinit var data : Map<String,List<Product>>
-     var productsList = mutableListOf<Product>()
+    var productsList = mutableListOf<Product>()
+
     fun getCatalog(){
         repository.getProducts(object: CatalogNetworkRepository.CatalogDataCallback {
             override fun onCatalogFetched(
@@ -50,78 +52,9 @@ class MainViewModel @Inject constructor(): ViewModel() {
     }
 
     fun filterData(
-        map: HashMap<String, String>, chosenList: List<Product>) {
+        queryList:MutableList<String>?) {
 
-//        var chosenSet = chosenList.toSet() // Products with Chosen (Filtration) Attributes
-//        var of = setOf<Product>()
-//
-//        var masterSet = mutableSetOf<Product>()
-//        masterSet.addAll(productsList)
-//
-//
-//        val unwantedSet = masterSet.minus(chosenSet) // Subtracted Unwanted Products
-//
-//        //val filteredSet = masterSet.minus(unwantedSet)
-//
-//        val filteredSet = masterSet.filter {// Filtered Set
-//            it.equals((chosenSet as LinkedHashSet).toArray()[0])
-//        }
-//        if(filteredSet.equals(masterSet)){
-//            //No Filtration Happened
-//            mappedData.value = masterSet.groupBy {
-//                it.brand!!
-//            }
-//        }else{
-//            mappedData.value = filteredSet.groupBy {
-//                it.brand!!
-//            }
-//        }
+        mappedData.value = FilteringHelper.performFiltering(productsList,queryList!!.toMutableList())
 
-
-        var gson = Gson()
-        val arrayTutorialType = object : TypeToken<ArrayList<Product>>() {}.type
-        val string = gson.toJson(productsList,arrayTutorialType)
-        var typeRef: TypeRef<ArrayList<Product>> = object : TypeRef<ArrayList<Product>>() {
-
-        }
-
-
-        val conf = Configuration.setDefaults(object : Configuration.Defaults {
-            private val jsonProvider: JsonProvider = GsonJsonProvider()
-            private val mappingProvider: MappingProvider = GsonMappingProvider()
-
-
-            override fun jsonProvider(): JsonProvider? {
-                return jsonProvider
-            }
-
-            override fun mappingProvider(): MappingProvider {
-                return mappingProvider
-            }
-
-
-            override fun options(): Set<Option?>? {
-                return EnumSet.noneOf(Option::class.java)
-            }
-        })
-
-        var root = "\$"
-        var start = "\$..[?"
-        var apple = "(@.brand=='Apple')"
-        var ericcson = "(@.brand=='Ericsson')"
-        var or = "||"
-        var and = "&&"
-        var end = "]"
-        var gps = "(@.gps==Yes with A-GPS)"
-        var audioJack = "(@.audioJack==Yes)"
-
-
-        var query = start+apple+and+gps+and+audioJack+end
-
-        JsonPath.parse(string).read("\$..[?((@.brand =='Apple' || @.brand=='Ericsson') && @.audioJack=='Yes')]",typeRef)
-        JsonPath.parse(string).read(start+apple +end,typeRef)
     }
-
-
-
 }

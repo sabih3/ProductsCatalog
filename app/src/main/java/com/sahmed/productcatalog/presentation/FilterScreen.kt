@@ -2,8 +2,6 @@ package com.sahmed.productcatalog.presentation
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,15 +9,15 @@ import android.widget.CompoundButton
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.sahmed.productcatalog.R
 import com.sahmed.productcatalog.framework.network.dto.Product
+import com.sahmed.productcatalog.framework.utils.FilteringHelper
 import kotlinx.android.synthetic.main.filter_bottom_sheet.*
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 class FilterScreen : BottomSheetDialogFragment(),CompoundButton.OnCheckedChangeListener{
 
     lateinit var listener : FilterInterface
-    var filterMap = HashMap<String,String>()
+    var queryList = mutableListOf<String>() // For inserting filtering parameters
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -40,79 +38,80 @@ class FilterScreen : BottomSheetDialogFragment(),CompoundButton.OnCheckedChangeL
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setPreselected() // Setting pre selected filter values
+
+        /** setup all checkboxes **/
+
         cb_apple.setOnCheckedChangeListener(this)
         cb_erricson.setOnCheckedChangeListener(this)
         cb_audio.setOnCheckedChangeListener(this)
         cb_gps.setOnCheckedChangeListener(this)
         cb_sim.setOnCheckedChangeListener(this)
+        /** --------------------------**/
 
+        //Apply Filter Button
         apply_btn.setOnClickListener {
-            if(appleProduct.isSelected){
-                listOfProduct.add(appleProduct)
-            }
-
-            if(ericssonProduct.isSelected){
-                listOfProduct.add(ericssonProduct)
-            }
-            listener.onFiltersApplied(filterMap,listOfProduct)
+            listener.onFiltersApplied(queryList)
             this@FilterScreen.dismiss()
         }
 
+        //Clear Filter Button
+        clear_btn.setOnClickListener {
+
+            cb_apple.isChecked = false
+            cb_erricson.isChecked = false
+            cb_audio.isChecked = false
+            cb_gps.isChecked = false
+            cb_sim.isChecked = false
+
+            listener.onFiltersCleared()
+        }
 
     }
 
+    // This method iterates over query params list and tick mark relevant query param
+    private fun setPreselected() {
+        queryList.forEach {
+            when(it){
+                FilteringHelper.LOOKUP_APPLE ->{
+                    cb_apple.isChecked = true
+                }
 
-    interface FilterInterface{
-        fun onFiltersApplied(map:HashMap<String,String>,listOfProducts:List<Product>)
-        fun onFiltersCleared()
+                FilteringHelper.LOOKUP_ERICSSON ->{
+                    cb_erricson.isChecked = true
+                }
+
+                FilteringHelper.LOOKUP_GPS ->{
+                    cb_gps.isChecked = true
+                }
+
+                FilteringHelper.LOOKUP_AUDIOJACK ->{
+                    cb_audio.isChecked = true
+                }
+            }
+        }
     }
 
-    var listOfProduct = mutableListOf<Product>()
-    var appleProduct = Product(brand = "Apple")
-    var ericssonProduct = Product(brand = "Ericsson")
-    var individualProduct = Product()
+    //Check Boxes Check mark Change Listener
+    //CompoundButton.OnCheckedChangeListener
     override fun onCheckedChanged(check_box: CompoundButton?, checked: Boolean) {
-
         when(checked){
             true->{
-
-
                 when(check_box!!.id){
 
                     cb_apple.id ->{
-                        //filterMap.put("brand",cb_apple.text.toString())
-                        var product = Product(brand = cb_apple.text.toString())
-                        appleProduct.isSelected = true
-                        //listOfProduct.add(product)
-                        //listOfProduct.add(appleProduct)
+                        queryList.add(FilteringHelper.LOOKUP_APPLE)
                     }
-
                     cb_erricson.id ->{
-                        //filterMap.put("brand",cb_erricson.text.toString())
-                        var product = Product(brand = cb_erricson.text.toString())
-                        ericssonProduct.isSelected = true
-                        //listOfProduct.add(ericssonProduct)
-                        //listOfProduct.add(product)
+                        queryList.add(FilteringHelper.LOOKUP_ERICSSON)
                     }
-
                     cb_audio.id ->{
-                        //filterMap.put("audioJack","Yes")
-                        individualProduct.audioJack = "Yes"
-                        appleProduct.audioJack = individualProduct.audioJack
-                        ericssonProduct.audioJack = individualProduct.audioJack
-                         if(!appleProduct.isSelected && !ericssonProduct.isSelected) listOfProduct.add(individualProduct)
-
-
+                        queryList.add(FilteringHelper.LOOKUP_AUDIOJACK)
                     }
-
                     cb_gps.id ->{
-                        //filterMap.put("gps","Yes with A-GPS")
-                        individualProduct.gps = "Yes with A-GPS"
-                        appleProduct.gps = individualProduct.gps
-                        ericssonProduct.gps = individualProduct.gps
-                        if(!appleProduct.isSelected && !ericssonProduct.isSelected) listOfProduct.add(individualProduct)
+                        queryList.add(FilteringHelper.LOOKUP_GPS)
                     }
-
                     cb_sim.id ->{
 
                     }
@@ -123,22 +122,20 @@ class FilterScreen : BottomSheetDialogFragment(),CompoundButton.OnCheckedChangeL
                 when(check_box!!.id){
 
                     cb_apple.id ->{
-                        appleProduct.isSelected = false
-                        if(listOfProduct.contains(appleProduct))listOfProduct.remove(appleProduct)
+                        if(queryList.contains(FilteringHelper.LOOKUP_APPLE))queryList.remove(FilteringHelper.LOOKUP_APPLE)
                     }
 
                     cb_erricson.id ->{
-                        ericssonProduct.isSelected = false
-                        if(listOfProduct.contains(ericssonProduct))listOfProduct.remove(ericssonProduct)
+                        if(queryList.contains(FilteringHelper.LOOKUP_ERICSSON))queryList.remove(FilteringHelper.LOOKUP_ERICSSON)
 
                     }
 
                     cb_audio.id ->{
-
+                        if(queryList.contains(FilteringHelper.LOOKUP_AUDIOJACK))queryList.remove(FilteringHelper.LOOKUP_AUDIOJACK)
                     }
 
                     cb_gps.id ->{
-
+                        if(queryList.contains(FilteringHelper.LOOKUP_GPS))queryList.remove(FilteringHelper.LOOKUP_GPS)
                     }
 
                     cb_sim.id ->{
@@ -147,8 +144,12 @@ class FilterScreen : BottomSheetDialogFragment(),CompoundButton.OnCheckedChangeL
                 }
             }
         }
-
-
     }
 
+    interface FilterInterface{
+        fun onFiltersApplied(
+            queryList: MutableList<String>?
+        )
+        fun onFiltersCleared()
+    }
 }
