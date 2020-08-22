@@ -83,7 +83,7 @@ object FilteringHelper {
                     }
                 }
             }
-            if(priceList.size>0){
+            if(priceList.size>0){ // Price is a range, hence it will be anded &&
 
                 priceList.forEachIndexed{index,element->
                     query+=and
@@ -96,7 +96,7 @@ object FilteringHelper {
 
             priceList.forEachIndexed{index,element->
                 query+=element
-                if(index != priceList.size-1)query+= and
+                if(index != priceList.size-1)query+= and // Price is a range, hence it will be anded &&
             }
             query+= end
         }else{

@@ -39,7 +39,7 @@ class ProductsAdapter : RecyclerView.Adapter<ProductHolder>(){
 
 class ProductHolder(itemview: View): RecyclerView.ViewHolder(itemview) {
     fun bindData(product: Product) {
-        itemView.row_brand.text = product.brand
+        itemView.row_brand.text = product.phone
         itemView.row_price.text = "€ " + product.priceEur.toString()
 
         Glide.with(itemView.context)

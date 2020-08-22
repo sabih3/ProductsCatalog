@@ -36,7 +36,8 @@
             android:layout_height="120dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            android:background="@drawable/item_gradient"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/row_price"
@@ -47,7 +48,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:textColor="@color/white"
-            android:textSize="14sp"
+            android:textSize="18sp"
             tools:text="Price"
             />
 
@@ -64,11 +65,12 @@
             app:layout_constraintBottom_toTopOf="@+id/row_price"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/row_price"
-            tools:text="Desc" />
+            tools:text="Desc"
+            android:visibility="gone"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/group_area"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
             app:layout_constraintBottom_toTopOf="@+id/row_desc"
@@ -76,17 +78,18 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/row_brand"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:gravity="center_vertical"
                 android:textColor="@color/white"
-                android:textSize="16sp"
+                android:textSize="20sp"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Brand" />
+                tools:text="Apple Watch Edition Series 2 42mm" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
