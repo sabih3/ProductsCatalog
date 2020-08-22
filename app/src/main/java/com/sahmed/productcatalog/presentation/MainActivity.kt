@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import androidx.lifecycle.Observer
 import com.google.android.material.tabs.TabLayoutMediator
 import com.sahmed.productcatalog.R
@@ -115,13 +116,16 @@ class MainActivity : AppCompatActivity(),FilterScreen.FilterInterface {
         priceRangeMinValue: Int,
         priceRangeMaxValue: Int
     ) {
+        indicator.visibility = View.VISIBLE
         priceMinSelected = priceRangeMinValue
         priceMaxSelected = priceRangeMaxValue
         appliedFilters = queryList!!
         mainViewModel.filterData(appliedFilters,priceMinSelected,priceMaxSelected)
+
     }
 
     override fun onFiltersCleared() {
+        indicator.visibility = View.GONE
         mainViewModel.clearFilteredData()
     }
 }

@@ -71,7 +71,10 @@ class FilterScreen : BottomSheetDialogFragment(),CompoundButton.OnCheckedChangeL
 
         //Apply Filter Button
         apply_btn.setOnClickListener {
-            listener.onFiltersApplied(queryList,priceMinSelected,priceMaxSelected)
+            if(queryList.size>0 ||
+                priceMinSelected!= DEFAULT_MIN_VALUE ||
+                priceMaxSelected!= priceMaxSelected)listener.onFiltersApplied(queryList,priceMinSelected,priceMaxSelected)
+
             this@FilterScreen.dismiss()
         }
 

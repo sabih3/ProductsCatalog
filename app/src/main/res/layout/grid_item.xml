@@ -50,6 +50,7 @@
             android:textColor="@color/white"
             android:textSize="18sp"
             tools:text="Price"
+
             />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -89,7 +90,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Apple Watch Edition Series 2 42mm" />
+                tools:text="Apple Watch Edition Series 2 42mm"
+                android:maxLines="2"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
