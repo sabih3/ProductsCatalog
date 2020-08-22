@@ -11,6 +11,7 @@ import com.jayway.jsonpath.spi.json.JsonProvider
 import com.jayway.jsonpath.spi.mapper.GsonMappingProvider
 import com.jayway.jsonpath.spi.mapper.MappingProvider
 import com.sahmed.productcatalog.framework.network.dto.Product
+import com.sahmed.productcatalog.presentation.FilterScreen
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -26,7 +27,8 @@ object FilteringHelper {
     const val LOOKUP_MICRO_SIM = "@.sim=='Micro-SIM'"
     const val LOOKUP_NANO_SIM = "@.sim=='Nano-SIM eSIM'"
     const val LOOKUP_E_SIM = "@.sim=='eSIM'"
-
+    const val LOOKUP_PRICE_MIN = "@.priceEur >="
+    const val LOOKUP_PRICE_MAX = "@.priceEur <="
     init {
         setConfig()
     }
@@ -42,13 +44,29 @@ object FilteringHelper {
     }
     val listType = object : TypeToken<ArrayList<Product>>() {}.type
 
-    fun performFiltering(listOfProducts:List<Product>,
-                         queryList:List<String>):Map<String, List<Product>> {
+    fun performFiltering(
+        listOfProducts: List<Product>,
+        queryList: List<String>,
+        priceMinSelected: Int,
+        priceMaxSelected: Int
+    ):Map<String, List<Product>> {
 
 
         val string = gson.toJson(listOfProducts,listType) // Obtaining Json String of products list
 
         var query = root // Query Default set to to return all Products
+        var priceList = mutableListOf<String>()
+        var brandList = mutableListOf<String>()
+
+        if(priceMinSelected!=FilterScreen.DEFAULT_MIN_VALUE || priceMaxSelected!=FilterScreen.DEFAULT_MAX_VALUE){
+            if(priceMinSelected!=FilterScreen.DEFAULT_MIN_VALUE){
+                priceList.add(LOOKUP_PRICE_MIN + " " +priceMinSelected)
+
+            }
+            if(priceMaxSelected!=FilterScreen.DEFAULT_MAX_VALUE){
+                priceList.add(LOOKUP_PRICE_MAX+ " "+ priceMaxSelected)
+            }
+        }
 
         /** Building Query**/
         if(queryList.size>0){
@@ -56,9 +74,33 @@ object FilteringHelper {
 
             queryList.forEachIndexed{index,element->
                 query+= element
-                if(index != queryList.size-1)query+= and
+
+                if(index != queryList.size-1){ // To Avoid appending operator after last token
+                    if(priceList.size!=0){// We have to Change the middle operator
+                        query+=or
+                    }else{
+                        query+= and
+                    }
+                }
+            }
+            if(priceList.size>0){
+
+                priceList.forEachIndexed{index,element->
+                    query+=and
+                    query+= element
+                }
             }
             query+=end
+        }else if(queryList.size==0 && priceList.size!=0){
+            query=start
+
+            priceList.forEachIndexed{index,element->
+                query+=element
+                if(index != priceList.size-1)query+= and
+            }
+            query+= end
+        }else{
+            query = root
         }
         /** Query Building End**/
 

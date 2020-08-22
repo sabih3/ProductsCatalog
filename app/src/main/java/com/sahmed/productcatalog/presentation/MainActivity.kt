@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
 import com.google.android.material.tabs.TabLayoutMediator
 import com.sahmed.productcatalog.R
@@ -25,6 +24,9 @@ class MainActivity : AppCompatActivity(),FilterScreen.FilterInterface {
     lateinit var mainViewModel: MainViewModel
 
     private lateinit var filterScreen : FilterScreen
+
+    private var priceMinSelected = FilterScreen.DEFAULT_MIN_VALUE // will be overridden in onFiltersApplied
+    private var priceMaxSelected = FilterScreen.DEFAULT_MAX_VALUE // will be overridden in onFiltersApplied
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +50,10 @@ class MainActivity : AppCompatActivity(),FilterScreen.FilterInterface {
 
         icon_filter.setOnClickListener {
             filterScreen = FilterScreen()
+            filterScreen.priceMinSelected = priceMinSelected
+            filterScreen.priceMaxSelected = priceMaxSelected
             if(appliedFilters.isNotEmpty())filterScreen.queryList = appliedFilters
+
             filterScreen.show(supportFragmentManager,"")
         }
     }
@@ -106,10 +111,14 @@ class MainActivity : AppCompatActivity(),FilterScreen.FilterInterface {
 
     //Filter Screen/FilterInterface
     override fun onFiltersApplied(
-        queryList: MutableList<String>?
+        queryList: MutableList<String>?,
+        priceRangeMinValue: Int,
+        priceRangeMaxValue: Int
     ) {
+        priceMinSelected = priceRangeMinValue
+        priceMaxSelected = priceRangeMaxValue
         appliedFilters = queryList!!
-        mainViewModel.filterData(appliedFilters)
+        mainViewModel.filterData(appliedFilters,priceMinSelected,priceMaxSelected)
     }
 
     override fun onFiltersCleared() {

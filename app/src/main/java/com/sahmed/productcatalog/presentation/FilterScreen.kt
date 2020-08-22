@@ -6,22 +6,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
-import android.widget.Filter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.rizlee.rangeseekbar.RangeSeekBar
 import com.sahmed.productcatalog.R
-import com.sahmed.productcatalog.framework.network.dto.Product
 import com.sahmed.productcatalog.framework.utils.FilteringHelper
 import kotlinx.android.synthetic.main.component_filter_buttons.*
 import kotlinx.android.synthetic.main.filter_bottom_sheet.*
+import kotlin.math.max
+import kotlin.math.min
 
 
 class FilterScreen : BottomSheetDialogFragment(),CompoundButton.OnCheckedChangeListener{
 
+    companion object{
+        val DEFAULT_MIN_VALUE = 50
+        val DEFAULT_MAX_VALUE = 15000
+    }
+
     lateinit var listener : FilterInterface
     var queryList = mutableListOf<String>() // For inserting filtering parameters
-
+    var priceMinSelected = DEFAULT_MIN_VALUE
+    var priceMaxSelected =  DEFAULT_MAX_VALUE
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -44,10 +51,12 @@ class FilterScreen : BottomSheetDialogFragment(),CompoundButton.OnCheckedChangeL
         super.onViewCreated(view, savedInstanceState)
         val behavior = (dialog as BottomSheetDialog).behavior
         behavior.state = BottomSheetBehavior.STATE_EXPANDED
+
+        // Setting Price Seekbar prior to pre selected, because it's range listener was disturbing the pre selected values after
+        setupPriceSeekbar()
         setPreselected() // Setting pre selected filter values
 
         /** setup all checkboxes **/
-
         cb_apple.setOnCheckedChangeListener(this)
         cb_erricson.setOnCheckedChangeListener(this)
         cb_audio.setOnCheckedChangeListener(this)
@@ -58,12 +67,11 @@ class FilterScreen : BottomSheetDialogFragment(),CompoundButton.OnCheckedChangeL
         cb_micro_sim.setOnCheckedChangeListener(this)
         cb_nano_esim.setOnCheckedChangeListener(this)
         cb_esim.setOnCheckedChangeListener(this)
-
         /** --------------------------**/
 
         //Apply Filter Button
         apply_btn.setOnClickListener {
-            listener.onFiltersApplied(queryList)
+            listener.onFiltersApplied(queryList,priceMinSelected,priceMaxSelected)
             this@FilterScreen.dismiss()
         }
 
@@ -80,12 +88,17 @@ class FilterScreen : BottomSheetDialogFragment(),CompoundButton.OnCheckedChangeL
             cb_micro_sim.isChecked = false
             cb_nano_esim.isChecked = false
             cb_esim.isChecked = false
+
+            priceMinSelected = DEFAULT_MIN_VALUE
+            priceMaxSelected = DEFAULT_MAX_VALUE
+            rangeSeekBar.setCurrentValues(priceMinSelected,priceMaxSelected)
+            selectedPriceList.clear()
             listener.onFiltersCleared()
         }
 
+
+
     }
-
-
 
     // This method iterates over query params list and tick mark relevant query param
     private fun setPreselected() {
@@ -241,6 +254,24 @@ class FilterScreen : BottomSheetDialogFragment(),CompoundButton.OnCheckedChangeL
 
     }
 
+    private fun setupPriceSeekbar() {
+        rangeSeekBar.setCurrentValues(priceMinSelected,priceMaxSelected)
+        rangeSeekBar.listenerPost = object: RangeSeekBar.OnRangeSeekBarPostListener {
+            override fun onValuesChanged(minValue: Float, maxValue: Float) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onValuesChanged(minValue: Int, maxValue: Int) {
+                priceMinSelected = minValue
+                priceMaxSelected = maxValue
+                txt_min.text = minValue.toString()
+                txt_max.text = maxValue.toString()
+            }
+
+        }
+
+    }
+
     fun showFilterCount(count:Int) = selection_count.setText(resources.getQuantityText(R.plurals.filterCount,count))
 
     fun updateFilterParam(param:String,toRemove:Boolean){
@@ -249,14 +280,42 @@ class FilterScreen : BottomSheetDialogFragment(),CompoundButton.OnCheckedChangeL
                 queryList.remove(param)
             }
         }else{
-            queryList.add(param)
+            if(queryList.size ==2 &&  queryList.contains(FilteringHelper.LOOKUP_PRICE_MIN) &&
+                queryList.contains(FilteringHelper.LOOKUP_PRICE_MAX)){
+                queryList.clear()
+                queryList.add(param)
+            }else{
+                queryList.add(param)
+            }
+
         }
+    }
+
+    var selectedPriceList = mutableListOf<String>()
+
+    fun updateParamForPrice(priceKey:String,value:String, toRemove:Boolean = false){
+        //val key_n_value = priceKey + " " + value
+        if(selectedPriceList.size>=2 && selectedPriceList.contains(priceKey)){
+            selectedPriceList.remove(priceKey)
+            selectedPriceList.add(priceKey)
+            selectedPriceList.forEach {
+                //queryList.add(priceKey+ " "+ value)
+            }
+        }else{
+            selectedPriceList.add(priceKey)
+//            selectedPriceList.forEach {
+//                queryList.add(priceKey+ " "+ value)
+//            }
+        }
+
     }
 
 
     interface FilterInterface{
         fun onFiltersApplied(
-            queryList: MutableList<String>?
+            queryList: MutableList<String>?,
+            priceRangeMinValue: Int,
+            priceRangeMaxValue: Int
         )
         fun onFiltersCleared()
     }
