@@ -72,7 +72,7 @@ class SearchView :FrameLayout{
                 icon_filter.visibility = View.VISIBLE
                 btn_open_search.visibility = View.VISIBLE
                 open_search_view.visibility = View.INVISIBLE
-                toolbar_search_input.setText("")
+                //toolbar_search_input.setText("")
                 circularConceal.removeAllListeners()
 
                 if(::searchWidgetListener.isInitialized)searchWidgetListener.onCloseSearch()

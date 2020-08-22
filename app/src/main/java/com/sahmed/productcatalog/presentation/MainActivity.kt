@@ -35,9 +35,10 @@ class MainActivity : AppCompatActivity(),FilterScreen.FilterInterface {
 
         DaggerAppComponent.factory().create(this).inject(this)
 
+        setupSearch()
         observeData()
         setupFilters()
-        setupSearch()
+
     }
 
     private fun observeData() {
@@ -60,13 +61,6 @@ class MainActivity : AppCompatActivity(),FilterScreen.FilterInterface {
     }
 
     private fun setupSearch() {
-        search_view.searchWidgetListener = object: SearchView.SearchWidgetListener {
-            override fun onCloseSearch() {
-                mainViewModel.clearFilteredData()
-            }
-
-        }
-
         toolbar_search_input.addTextChangedListener ( object: TextWatcher {
             override fun afterTextChanged(inputView: Editable?) {
 
@@ -78,11 +72,13 @@ class MainActivity : AppCompatActivity(),FilterScreen.FilterInterface {
 
             override fun onTextChanged(chars: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 val query = chars.toString().trim()
-                if(query.length>0)mainViewModel.performSearch(query)
-                else mainViewModel.clearFilteredData()
+                mainViewModel.performSearch(query)
+
+
             }
 
         } )
+
 
 
     }
