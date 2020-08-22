@@ -4,5 +4,10 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="image_here">Image</string>
 
+    <plurals name="filterCount">
 
+        <item quantity="zero">No Filter applied</item>
+        <item quantity="one">%d filter applied.</item>
+        <item quantity="other">%d filters applied.</item>
+    </plurals>
 </resources>

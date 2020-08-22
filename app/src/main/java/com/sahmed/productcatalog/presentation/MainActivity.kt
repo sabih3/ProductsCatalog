@@ -2,12 +2,17 @@ package com.sahmed.productcatalog.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
 import com.google.android.material.tabs.TabLayoutMediator
 import com.sahmed.productcatalog.R
+import com.sahmed.productcatalog.framework.SearchView
 import com.sahmed.productcatalog.framework.di.DaggerAppComponent
 import com.sahmed.productcatalog.framework.network.dto.Product
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.view_search.*
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(),FilterScreen.FilterInterface {
@@ -49,9 +54,31 @@ class MainActivity : AppCompatActivity(),FilterScreen.FilterInterface {
     }
 
     private fun setupSearch() {
-        btn_open_search.setOnClickListener {
+        search_view.searchWidgetListener = object: SearchView.SearchWidgetListener {
+            override fun onCloseSearch() {
+                mainViewModel.clearFilteredData()
+            }
 
         }
+
+        toolbar_search_input.addTextChangedListener ( object: TextWatcher {
+            override fun afterTextChanged(inputView: Editable?) {
+
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun onTextChanged(chars: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                val query = chars.toString().trim()
+                if(query.length>0)mainViewModel.performSearch(query)
+                else mainViewModel.clearFilteredData()
+            }
+
+        } )
+
+
     }
 
 
@@ -86,6 +113,6 @@ class MainActivity : AppCompatActivity(),FilterScreen.FilterInterface {
     }
 
     override fun onFiltersCleared() {
-        mainViewModel.getCatalog()
+        mainViewModel.clearFilteredData()
     }
 }

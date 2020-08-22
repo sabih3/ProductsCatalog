@@ -20,6 +20,12 @@ object FilteringHelper {
     const val LOOKUP_ERICSSON = "@.brand=='Ericsson'"
     const val LOOKUP_GPS = "@.gps!='No'"
     const val LOOKUP_AUDIOJACK = "@.audioJack=='Yes'"
+    const val LOOKUP_NO_SIM = "@.sim=='No'"
+    const val LOOKUP_SINGLE_SIM = "@.sim=='Single SIM'"
+    const val LOOKUP_MINI_SIM = "@.sim=='Mini-SIM'"
+    const val LOOKUP_MICRO_SIM = "@.sim=='Micro-SIM'"
+    const val LOOKUP_NANO_SIM = "@.sim=='Nano-SIM eSIM'"
+    const val LOOKUP_E_SIM = "@.sim=='eSIM'"
 
     init {
         setConfig()

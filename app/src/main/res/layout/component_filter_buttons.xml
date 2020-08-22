@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="Brand"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:layout_marginLeft="6dp"/>
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/cb_apple"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:text="Apple"
+            android:checked="false"
+            />
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/cb_erricson"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:text="Ericsson"
+            android:checked="false"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="Features"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:layout_marginLeft="6dp"/>
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/cb_audio"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:text="Audio Jack"
+            android:checked="false"
+            />
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/cb_gps"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:text="GPS"
+            android:checked="false"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="SIM Type"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:layout_marginLeft="6dp"/>
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/cb_no_sim"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:text="No SIM"
+            android:checked="false"
+
+            />
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/cb_single_sim"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:text="Single SIM"
+            android:checked="false"
+            />
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/cb_mini_sim"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:text="Mini SIM"
+            android:checked="false"
+            />
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/cb_micro_sim"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:text="Micro SIM"
+            android:checked="false"
+            />
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/cb_nano_esim"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:text="Nano-SIM + eSIM"
+            android:checked="false"
+            />
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/cb_esim"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:text="eSIM"
+            android:checked="false"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:textSize="20sp"
+            android:text="Price"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:layout_marginLeft="6dp"/>
+    </LinearLayout>
+
+
+</androidx.core.widget.NestedScrollView>

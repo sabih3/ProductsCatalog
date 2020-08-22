@@ -29,8 +29,8 @@ class MainViewModel @Inject constructor(): ViewModel() {
     lateinit var repository:CatalogNetworkRepository
 
     val mappedData  = MutableLiveData<Map<String,List<Product>>>()
-    lateinit var data : Map<String,List<Product>>
-    var productsList = mutableListOf<Product>()
+    private lateinit var data : Map<String,List<Product>>
+    private var productsList = mutableListOf<Product>()
 
     fun getCatalog(){
         repository.getProducts(object: CatalogNetworkRepository.CatalogDataCallback {
@@ -56,5 +56,16 @@ class MainViewModel @Inject constructor(): ViewModel() {
 
         mappedData.value = FilteringHelper.performFiltering(productsList,queryList!!.toMutableList())
 
+    }
+
+    fun clearFilteredData(){
+        getCatalog()
+    }
+    fun performSearch(query:String){
+        mappedData.value = productsList.filter {
+            it.phone!!.contains(query,true)
+        }.groupBy {
+            it.brand!!
+        }
     }
 }

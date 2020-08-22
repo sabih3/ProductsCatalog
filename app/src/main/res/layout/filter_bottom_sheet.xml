@@ -3,15 +3,16 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/bottom_sheet_food_beverage"
+    android:id="@+id/bottom_sheet_filter"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="@dimen/spacing_single"
     app:behavior_peekHeight="0dp"
-    app:layout_behavior="com.mallconnect.tdm.utility.widgets.AnchorSheetBehavior"
     android:clickable="true"
     tools:visibility="visible"
     android:focusable="true"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+
     >
 
     <LinearLayout
@@ -24,7 +25,9 @@
             android:id="@+id/handleView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="visible">
+            android:visibility="visible"
+            android:paddingTop="10dp"
+            android:paddingBottom="20dp">
 
             <View
                 android:id="@+id/handle_light"
@@ -39,14 +42,14 @@
                 android:padding="@dimen/spacing_single" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/selected_filters_tv"
+                android:id="@+id/selection_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_marginEnd="20dp"
                 android:layout_marginTop="20dp"
                 tools:text="2 Filters selected"
-                android:textColor="#999999"
+                android:textColor="@color/black"
                 />
 
 
@@ -56,66 +59,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
-                android:text="Location"
-                android:textColor="@color/white"
+                android:text="Filters"
+                android:textColor="@color/black"
+                android:textSize="16sp"
                 />
 
         </RelativeLayout>
-
-
-        <EditText
-            android:id="@+id/search_filters"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="19dp"
-            android:layout_marginEnd="20dp"
-            android:visibility="gone"
-            tools:visibility="visible"
-            android:drawablePadding="8dp"
-            android:gravity="center_vertical"
-            android:textColor="#666666"
-            android:textSize="16sp" />
-
-        <androidx.appcompat.widget.AppCompatCheckBox
-            android:id="@+id/cb_apple"
-            android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:text="Apple"
-            android:checked="false"
-            />
-
-        <androidx.appcompat.widget.AppCompatCheckBox
-            android:id="@+id/cb_erricson"
-            android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:text="Ericsson"
-            android:checked="false"
-            />
-
-        <androidx.appcompat.widget.AppCompatCheckBox
-            android:id="@+id/cb_audio"
-            android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:text="Audio Jack"
-            android:checked="false"
-            />
-
-        <androidx.appcompat.widget.AppCompatCheckBox
-            android:id="@+id/cb_gps"
-            android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:text="GPS"
-            android:checked="false"
-            />
-
-        <androidx.appcompat.widget.AppCompatCheckBox
-            android:id="@+id/cb_sim"
-            android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:text="Nano Sim"
-            android:checked="false"
-            />
+        <include layout="@layout/component_filter_buttons"/>
 
         <LinearLayout
             android:layout_marginStart="20dp"
