@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.widget.Toast
+import android.widget.Toast.*
 import androidx.lifecycle.Observer
 import com.google.android.material.tabs.TabLayoutMediator
 import com.sahmed.productcatalog.R
@@ -44,18 +46,44 @@ class MainActivity : AppCompatActivity(),
 
     }
 
+    /**Initial Data Fetch call & Observatory method
+     *
+     */
     private fun observeData() {
-        shimmer_parent.visibility = View.VISIBLE
-        shimmer_parent.showShimmer(true)
-        mainViewModel.getCatalog()
-        mainViewModel.mappedData.observe(this,Observer<Map<String, List<Product>>> { groupedData->
-            shimmer_parent.showShimmer(false)
-            shimmer_parent.visibility = View.GONE
-            setupPager(groupedData)
 
+        mainViewModel.getCatalog()
+
+        mainViewModel.observatoryData.observe(this, Observer {
+            when(it){
+                is MainViewModel.ResponseState.Loading ->{
+                    shimmer_parent.visibility = View.VISIBLE
+                    shimmer_parent.showShimmer(true)
+                }
+
+                is MainViewModel.ResponseState.Empty -> {
+                    shimmer_parent.showShimmer(false)
+                    shimmer_parent.visibility = View.GONE
+                    makeText(this@MainActivity,getString(R.string.empty_data),Toast.LENGTH_SHORT).show()
+                }
+
+                is MainViewModel.ResponseState.Success -> {
+                    shimmer_parent.showShimmer(false)
+                    shimmer_parent.visibility = View.GONE
+                    setupPager(it.data)
+                }
+
+                is MainViewModel.ResponseState.Error ->{
+                    shimmer_parent.showShimmer(false)
+                    shimmer_parent.visibility = View.GONE
+                    makeText(this@MainActivity,it.message,LENGTH_SHORT).show()
+                }
+            }
         })
     }
 
+    /**
+     * Filter UI Setup
+     */
     private fun setupFilters() {
 
         icon_filter.setOnClickListener {
@@ -69,6 +97,9 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
+    /**
+     * Search UI Setup
+     */
     private fun setupSearch() {
         toolbar_search_input.addTextChangedListener ( object: TextWatcher {
             override fun afterTextChanged(inputView: Editable?) {
@@ -122,9 +153,17 @@ class MainActivity : AppCompatActivity(),
         TabLayoutMediator(tab_layout, pager) { tab, position ->
             tab.text = list.get(position).title
         }.attach()
+
+        if(groupedData.isNotEmpty()){
+            search_view.visibility = View.VISIBLE
+            icon_filter.visibility = View.VISIBLE
+        }else{
+            search_view.visibility = View.GONE
+            icon_filter.visibility = View.GONE
+        }
     }
 
-    //Filter Screen/FilterInterface
+    //Filter Screen.FilterInterface
     override fun onFiltersApplied(
         queryList: MutableList<String>?,
         priceRangeMinValue: Int,
@@ -138,8 +177,9 @@ class MainActivity : AppCompatActivity(),
 
     }
 
+    //Filter Screen.FilterInterface
     override fun onFiltersCleared() {
-        indicator.visibility = View.GONE
+        indicator.visibility = View.GONE// Blue Dot Indicator for filter
         mainViewModel.clearFilteredData()
     }
 }

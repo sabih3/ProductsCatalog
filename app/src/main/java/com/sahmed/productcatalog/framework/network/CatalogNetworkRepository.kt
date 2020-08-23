@@ -4,6 +4,8 @@ import com.sahmed.productcatalog.framework.network.dto.Product
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 class CatalogNetworkRepository @Inject constructor(val networkDataSource: NetworkDataSource) {
@@ -15,7 +17,11 @@ class CatalogNetworkRepository @Inject constructor(val networkDataSource: Networ
         var listOfProducts  = listOf<Product>()
         callable.enqueue(object: Callback<List<Product>> {
             override fun onFailure(call: Call<List<Product>>, t: Throwable) {
-
+                if(t is UnknownHostException || t is SocketTimeoutException){
+                    callback.onError("Seems like you are not connected to Internet",501)
+                }else{
+                    callback.onError("Something went wrong, Please try again ",502)
+                }
             }
 
             override fun onResponse(
@@ -28,6 +34,7 @@ class CatalogNetworkRepository @Inject constructor(val networkDataSource: Networ
                             it.brand!!
                         }
                         listOfProducts = response.body()!!
+
                         callback.onCatalogFetched(data,listOfProducts)
 
                     }else{
@@ -37,7 +44,7 @@ class CatalogNetworkRepository @Inject constructor(val networkDataSource: Networ
                 }else{
 
                     //API Error
-                    callback.onError("",500)
+                    callback.onError("Something went wrong, Please try again ",500)
                 }
             }
 

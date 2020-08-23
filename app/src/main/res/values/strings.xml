@@ -3,6 +3,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="image_here">Image</string>
+    <string name="empty_data">Results couldn\'t be found. Please try modifying the filters</string>
 
     <plurals name="filterCount">
 
