@@ -23,11 +23,20 @@ Same screen has search and filtering feature.
 Search works for the "phone name" field for the products currently displayed.
 
 Filter Screen opens up with a slide up effect for better UX, contains all the main filter options such as :
+
 1)Brand 
+
 2)Audio Jack 
+
 3)GPS  
+
 4)Price ranges &
-SIM Types as NO SIM, Single, Mini, Micro, Nano & e-SIMs
+
+5)SIM Types as NO SIM, Single, Mini, Micro, Nano & e-SIMs
+
+
+
+
 
 
 
