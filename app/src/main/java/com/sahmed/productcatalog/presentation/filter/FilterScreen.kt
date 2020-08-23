@@ -71,10 +71,10 @@ class FilterScreen : BottomSheetDialogFragment(),CompoundButton.OnCheckedChangeL
 
         //Apply Filter Button
         apply_btn.setOnClickListener {
-            if(queryList.size>0 ||
-                priceMinSelected!= DEFAULT_MIN_VALUE ||
-                priceMaxSelected!= priceMaxSelected)listener.onFiltersApplied(queryList,priceMinSelected,priceMaxSelected)
-
+//            if(queryList.size>0 ||
+//                priceMinSelected!= DEFAULT_MIN_VALUE ||
+//                priceMaxSelected!= priceMaxSelected)
+            listener.onFiltersApplied(queryList,priceMinSelected,priceMaxSelected)
             this@FilterScreen.dismiss()
         }
 
@@ -97,6 +97,7 @@ class FilterScreen : BottomSheetDialogFragment(),CompoundButton.OnCheckedChangeL
             priceMaxSelected =
                 DEFAULT_MAX_VALUE
             rangeSeekBar.setCurrentValues(priceMinSelected,priceMaxSelected)
+            queryList.clear()
             selectedPriceList.clear()
             listener.onFiltersCleared()
 

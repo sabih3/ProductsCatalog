@@ -46,7 +46,7 @@ object FilteringHelper {
 
     fun performFiltering(
         listOfProducts: List<Product>,
-        queryList: List<String>,
+        queryList: MutableList<String>,
         priceMinSelected: Int,
         priceMaxSelected: Int
     ):Map<String, List<Product>> {
@@ -56,8 +56,8 @@ object FilteringHelper {
 
         var query = root // Query Default set to to return all Products
         var priceList = mutableListOf<String>()
-        var brandList = mutableListOf<String>()
 
+        //Selected Prices were kept separated from querylist to retain the pre selected state in Filter Sheet
         if(priceMinSelected!= FilterScreen.DEFAULT_MIN_VALUE || priceMaxSelected!= FilterScreen.DEFAULT_MAX_VALUE){
             if(priceMinSelected!= FilterScreen.DEFAULT_MIN_VALUE){
                 priceList.add(LOOKUP_PRICE_MIN + " " +priceMinSelected)
@@ -68,6 +68,17 @@ object FilteringHelper {
             }
         }
 
+        //In case all the brands are selected, we need to OR them before combining with other filters,
+        //that's the reason, here we are removing their individual values, and adding them after combining
+        //with OR, eg: To get ((@.brand=='Apple' || @.brand=='Ericsson')&&@.sim=='Mini-SIM')
+        //this should give any phone among Apple and Ericsson with Mini-Sim
+        if(queryList.isNotEmpty() && queryList.contains(LOOKUP_APPLE) && queryList.contains( LOOKUP_ERICSSON)){
+            queryList.remove(LOOKUP_APPLE)
+            queryList.remove(LOOKUP_ERICSSON)
+            queryList.add("("+ LOOKUP_APPLE+or+" "+ LOOKUP_ERICSSON+")")
+
+        }
+
         /** Building Query**/
         if(queryList.size>0){
             query=start // if query params present, replace the default with Query start
@@ -76,14 +87,15 @@ object FilteringHelper {
                 query+= element
 
                 if(index != queryList.size-1){ // To Avoid appending operator after last token
-                    if(priceList.size!=0){// We have to Change the middle operator
+                    if(priceList.size!=0){ //When price range comes along other filters, it will be OR among other filters
                         query+=or
                     }else{
-                        query+= and
+                        query+= and   // in case no price range, only filters, they will be AND among each other
+                                      // because a phone can have one feature at a time
                     }
                 }
             }
-            if(priceList.size>0){ // Price is a range, hence it will be anded &&
+            if(priceList.size>0){ // Price is being ANDed among its own min and max values 'min>=50 && max<=800'
 
                 priceList.forEachIndexed{index,element->
                     query+=and
@@ -91,7 +103,9 @@ object FilteringHelper {
                 }
             }
             query+=end
-        }else if(queryList.size==0 && priceList.size!=0){
+
+         //Other filters are un touched, Only price ranges are selected
+        }else if(queryList.size==0 && priceList.size!=0){ // only & only price range selected
             query=start
 
             priceList.forEachIndexed{index,element->
@@ -104,17 +118,16 @@ object FilteringHelper {
         }
         /** Query Building End**/
 
+        // Initializing the resultant data with master data for safe side, in case of exception
         var filteredList = listOfProducts
 
         try{
             filteredList = JsonPath.parse(string).read(query, typeRef) // Providing Query to parser
         }catch (exc:Exception){
             // To prevent any crash, returning same products list
-
             return filteredList.groupBy { it.brand!! }
 
         }
-
         return filteredList.groupBy {
             it.brand!!
         }

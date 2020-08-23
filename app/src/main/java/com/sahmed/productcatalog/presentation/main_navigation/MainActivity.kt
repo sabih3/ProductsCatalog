@@ -181,11 +181,18 @@ class MainActivity : AppCompatActivity(),
         priceRangeMinValue: Int,
         priceRangeMaxValue: Int
     ) {
-        indicator.visibility = View.VISIBLE
+
         priceMinSelected = priceRangeMinValue
         priceMaxSelected = priceRangeMaxValue
         appliedFilters = queryList!!
+
         mainViewModel.filterData(appliedFilters,priceMinSelected,priceMaxSelected)
+        if(appliedFilters.isNotEmpty() ||
+            priceMinSelected!=FilterScreen.DEFAULT_MIN_VALUE || priceMaxSelected!=FilterScreen.DEFAULT_MAX_VALUE){
+            indicator.visibility = View.VISIBLE
+        }else{
+            indicator.visibility = View.GONE
+        }
 
     }
 
