@@ -25,6 +25,8 @@ class FilterScreen : BottomSheetDialogFragment(),CompoundButton.OnCheckedChangeL
 
     lateinit var listener : FilterInterface
     var queryList = mutableListOf<String>() // For inserting filtering parameters
+    var selectedPriceList = mutableListOf<String>()
+
     var priceMinSelected =
         DEFAULT_MIN_VALUE
     var priceMaxSelected =
@@ -71,9 +73,6 @@ class FilterScreen : BottomSheetDialogFragment(),CompoundButton.OnCheckedChangeL
 
         //Apply Filter Button
         apply_btn.setOnClickListener {
-//            if(queryList.size>0 ||
-//                priceMinSelected!= DEFAULT_MIN_VALUE ||
-//                priceMaxSelected!= priceMaxSelected)
             listener.onFiltersApplied(queryList,priceMinSelected,priceMaxSelected)
             this@FilterScreen.dismiss()
         }
@@ -291,25 +290,6 @@ class FilterScreen : BottomSheetDialogFragment(),CompoundButton.OnCheckedChangeL
             }
 
         }
-    }
-
-    var selectedPriceList = mutableListOf<String>()
-
-    fun updateParamForPrice(priceKey:String,value:String, toRemove:Boolean = false){
-        //val key_n_value = priceKey + " " + value
-        if(selectedPriceList.size>=2 && selectedPriceList.contains(priceKey)){
-            selectedPriceList.remove(priceKey)
-            selectedPriceList.add(priceKey)
-            selectedPriceList.forEach {
-                //queryList.add(priceKey+ " "+ value)
-            }
-        }else{
-            selectedPriceList.add(priceKey)
-//            selectedPriceList.forEach {
-//                queryList.add(priceKey+ " "+ value)
-//            }
-        }
-
     }
 
 
