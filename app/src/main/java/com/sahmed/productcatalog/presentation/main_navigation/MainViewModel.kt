@@ -1,4 +1,4 @@
-package com.sahmed.productcatalog.presentation
+package com.sahmed.productcatalog.presentation.main_navigation
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

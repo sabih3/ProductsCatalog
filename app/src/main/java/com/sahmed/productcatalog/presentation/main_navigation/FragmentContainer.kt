@@ -1,4 +1,4 @@
-package com.sahmed.productcatalog.presentation
+package com.sahmed.productcatalog.presentation.main_navigation
 
 import androidx.fragment.app.Fragment
 import com.sahmed.productcatalog.framework.network.dto.Product

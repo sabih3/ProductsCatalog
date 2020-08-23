@@ -1,4 +1,4 @@
-package com.sahmed.productcatalog.presentation
+package com.sahmed.productcatalog.presentation.filter
 
 import android.content.Context
 import android.os.Bundle
@@ -14,8 +14,6 @@ import com.sahmed.productcatalog.R
 import com.sahmed.productcatalog.framework.utils.FilteringHelper
 import kotlinx.android.synthetic.main.component_filter_buttons.*
 import kotlinx.android.synthetic.main.filter_bottom_sheet.*
-import kotlin.math.max
-import kotlin.math.min
 
 
 class FilterScreen : BottomSheetDialogFragment(),CompoundButton.OnCheckedChangeListener{
@@ -27,8 +25,10 @@ class FilterScreen : BottomSheetDialogFragment(),CompoundButton.OnCheckedChangeL
 
     lateinit var listener : FilterInterface
     var queryList = mutableListOf<String>() // For inserting filtering parameters
-    var priceMinSelected = DEFAULT_MIN_VALUE
-    var priceMaxSelected =  DEFAULT_MAX_VALUE
+    var priceMinSelected =
+        DEFAULT_MIN_VALUE
+    var priceMaxSelected =
+        DEFAULT_MAX_VALUE
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -92,8 +92,10 @@ class FilterScreen : BottomSheetDialogFragment(),CompoundButton.OnCheckedChangeL
             cb_nano_esim.isChecked = false
             cb_esim.isChecked = false
 
-            priceMinSelected = DEFAULT_MIN_VALUE
-            priceMaxSelected = DEFAULT_MAX_VALUE
+            priceMinSelected =
+                DEFAULT_MIN_VALUE
+            priceMaxSelected =
+                DEFAULT_MAX_VALUE
             rangeSeekBar.setCurrentValues(priceMinSelected,priceMaxSelected)
             selectedPriceList.clear()
             listener.onFiltersCleared()

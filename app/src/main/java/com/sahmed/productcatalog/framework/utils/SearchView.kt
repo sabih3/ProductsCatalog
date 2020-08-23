@@ -1,4 +1,4 @@
-package com.sahmed.productcatalog.framework
+package com.sahmed.productcatalog.framework.utils
 
 import android.animation.Animator
 import android.content.Context
@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.view_search.view.toolbar_search_input
 class SearchView :FrameLayout{
     var title :String? =  ""
     var expanded : Boolean? = false
-    lateinit var searchWidgetListener:SearchWidgetListener
+    lateinit var searchWidgetListener: SearchWidgetListener
 
     constructor(context: Context) : super(context)
     constructor(context:Context,attrs: AttributeSet):super(context,attrs){

@@ -11,7 +11,7 @@ import com.jayway.jsonpath.spi.json.JsonProvider
 import com.jayway.jsonpath.spi.mapper.GsonMappingProvider
 import com.jayway.jsonpath.spi.mapper.MappingProvider
 import com.sahmed.productcatalog.framework.network.dto.Product
-import com.sahmed.productcatalog.presentation.FilterScreen
+import com.sahmed.productcatalog.presentation.filter.FilterScreen
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -58,12 +58,12 @@ object FilteringHelper {
         var priceList = mutableListOf<String>()
         var brandList = mutableListOf<String>()
 
-        if(priceMinSelected!=FilterScreen.DEFAULT_MIN_VALUE || priceMaxSelected!=FilterScreen.DEFAULT_MAX_VALUE){
-            if(priceMinSelected!=FilterScreen.DEFAULT_MIN_VALUE){
+        if(priceMinSelected!= FilterScreen.DEFAULT_MIN_VALUE || priceMaxSelected!= FilterScreen.DEFAULT_MAX_VALUE){
+            if(priceMinSelected!= FilterScreen.DEFAULT_MIN_VALUE){
                 priceList.add(LOOKUP_PRICE_MIN + " " +priceMinSelected)
 
             }
-            if(priceMaxSelected!=FilterScreen.DEFAULT_MAX_VALUE){
+            if(priceMaxSelected!= FilterScreen.DEFAULT_MAX_VALUE){
                 priceList.add(LOOKUP_PRICE_MAX+ " "+ priceMaxSelected)
             }
         }

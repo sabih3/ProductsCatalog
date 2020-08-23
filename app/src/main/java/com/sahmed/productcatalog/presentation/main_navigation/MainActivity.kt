@@ -1,4 +1,4 @@
-package com.sahmed.productcatalog.presentation
+package com.sahmed.productcatalog.presentation.main_navigation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,14 +8,17 @@ import android.view.View
 import androidx.lifecycle.Observer
 import com.google.android.material.tabs.TabLayoutMediator
 import com.sahmed.productcatalog.R
-import com.sahmed.productcatalog.framework.SearchView
 import com.sahmed.productcatalog.framework.di.DaggerAppComponent
 import com.sahmed.productcatalog.framework.network.dto.Product
+import com.sahmed.productcatalog.presentation.filter.FilterScreen
+import com.sahmed.productcatalog.presentation.product_list.ProductListFragment
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.shimmer_layout.*
 import kotlinx.android.synthetic.main.view_search.*
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(),FilterScreen.FilterInterface {
+class MainActivity : AppCompatActivity(),
+    FilterScreen.FilterInterface {
 
     // List for Applied filters, will be utilized to pass again in Filter screen to show pre
     //selected check boxes
@@ -42,16 +45,22 @@ class MainActivity : AppCompatActivity(),FilterScreen.FilterInterface {
     }
 
     private fun observeData() {
+        shimmer_parent.visibility = View.VISIBLE
+        shimmer_parent.showShimmer(true)
         mainViewModel.getCatalog()
         mainViewModel.mappedData.observe(this,Observer<Map<String, List<Product>>> { groupedData->
+            shimmer_parent.showShimmer(false)
+            shimmer_parent.visibility = View.GONE
             setupPager(groupedData)
+
         })
     }
 
     private fun setupFilters() {
 
         icon_filter.setOnClickListener {
-            filterScreen = FilterScreen()
+            filterScreen =
+                FilterScreen()
             filterScreen.priceMinSelected = priceMinSelected
             filterScreen.priceMaxSelected = priceMaxSelected
             if(appliedFilters.isNotEmpty())filterScreen.queryList = appliedFilters
@@ -89,11 +98,20 @@ class MainActivity : AppCompatActivity(),FilterScreen.FilterInterface {
      *
      */
     private fun setupPager(groupedData: Map<String, List<Product>>) {
-        val adapter = TabsAdapter(supportFragmentManager,lifecycle)
+        val adapter =
+            TabsAdapter(
+                supportFragmentManager,
+                lifecycle
+            )
         var list = mutableListOf<FragmentContainer>()
 
         groupedData.keys.forEach{
-            var container  = FragmentContainer(ProductListFragment(),it,groupedData.get(it)!!)
+            var container  =
+                FragmentContainer(
+                    ProductListFragment(),
+                    it,
+                    groupedData.get(it)!!
+                )
             list.add(container)
         }
         pager.let {

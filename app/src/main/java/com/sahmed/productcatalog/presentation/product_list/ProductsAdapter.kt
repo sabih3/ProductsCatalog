@@ -1,4 +1,4 @@
-package com.sahmed.productcatalog.presentation
+package com.sahmed.productcatalog.presentation.product_list
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.bumptech.glide.request.RequestOptions
 import com.sahmed.productcatalog.R
 import com.sahmed.productcatalog.framework.network.dto.Product
 import kotlinx.android.synthetic.main.grid_item.view.*
@@ -20,7 +19,8 @@ class ProductsAdapter : RecyclerView.Adapter<ProductHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductHolder {
         val row = LayoutInflater.from(parent.context).inflate(R.layout.grid_item,parent,false)
 
-        var holder = ProductHolder(row)
+        var holder =
+            ProductHolder(row)
 
         return holder
     }
