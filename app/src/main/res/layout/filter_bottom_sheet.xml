@@ -42,18 +42,6 @@
                 android:padding="@dimen/spacing_single" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/selection_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="20dp"
-                tools:text="2 Filters selected"
-                android:textColor="@color/black"
-                />
-
-
-            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/bottom_sheet_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -61,7 +49,8 @@
                 android:layout_marginTop="20dp"
                 android:text="Filters"
                 android:textColor="@color/black"
-                android:textSize="16sp"
+                android:textSize="20sp"
+                android:textStyle="bold"
                 />
 
         </RelativeLayout>
@@ -83,7 +72,7 @@
                 android:layout_height="40dp"
                 android:layout_weight="1"
                 android:text="Clear"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textAllCaps="false"
                 android:textSize="16sp"
                 />

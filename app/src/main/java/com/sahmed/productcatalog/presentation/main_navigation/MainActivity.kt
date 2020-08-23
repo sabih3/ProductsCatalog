@@ -40,8 +40,8 @@ class MainActivity : AppCompatActivity(),
 
         DaggerAppComponent.factory().create(this).inject(this)
 
-        setupSearch()
         observeData()
+        setupSearch()
         setupFilters()
 
     }
@@ -56,25 +56,24 @@ class MainActivity : AppCompatActivity(),
         mainViewModel.observatoryData.observe(this, Observer {
             when(it){
                 is MainViewModel.ResponseState.Loading ->{
-                    shimmer_parent.visibility = View.VISIBLE
-                    shimmer_parent.showShimmer(true)
+                    showLoading(true)
                 }
 
                 is MainViewModel.ResponseState.Empty -> {
-                    shimmer_parent.showShimmer(false)
-                    shimmer_parent.visibility = View.GONE
+                    showLoading(false)
+                    showFilters(true)
                     makeText(this@MainActivity,getString(R.string.empty_data),Toast.LENGTH_SHORT).show()
                 }
 
                 is MainViewModel.ResponseState.Success -> {
-                    shimmer_parent.showShimmer(false)
-                    shimmer_parent.visibility = View.GONE
+                    showLoading(false)
                     setupPager(it.data)
+                    showFilters(true)
                 }
 
                 is MainViewModel.ResponseState.Error ->{
-                    shimmer_parent.showShimmer(false)
-                    shimmer_parent.visibility = View.GONE
+                    showLoading(false)
+                    showFilters(false)
                     makeText(this@MainActivity,it.message,LENGTH_SHORT).show()
                 }
             }
@@ -154,15 +153,28 @@ class MainActivity : AppCompatActivity(),
             tab.text = list.get(position).title
         }.attach()
 
-        if(groupedData.isNotEmpty()){
-            search_view.visibility = View.VISIBLE
-            icon_filter.visibility = View.VISIBLE
+    }
+
+    fun showLoading(show:Boolean){
+        if(show){
+            shimmer_parent.visibility = View.VISIBLE
+            shimmer_parent.showShimmer(true)
         }else{
-            search_view.visibility = View.GONE
-            icon_filter.visibility = View.GONE
+            shimmer_parent.visibility = View.GONE
+            shimmer_parent.showShimmer(false)
         }
     }
 
+    fun showFilters(show:Boolean){
+        if(show){
+            btn_open_search.visibility = View.VISIBLE
+            icon_filter.visibility = View.VISIBLE
+        }else{
+            btn_open_search.visibility = View.GONE
+            icon_filter.visibility = View.GONE
+        }
+
+    }
     //Filter Screen.FilterInterface
     override fun onFiltersApplied(
         queryList: MutableList<String>?,

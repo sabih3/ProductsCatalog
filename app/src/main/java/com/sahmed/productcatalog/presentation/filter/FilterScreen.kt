@@ -99,6 +99,7 @@ class FilterScreen : BottomSheetDialogFragment(),CompoundButton.OnCheckedChangeL
             rangeSeekBar.setCurrentValues(priceMinSelected,priceMaxSelected)
             selectedPriceList.clear()
             listener.onFiltersCleared()
+
         }
 
 
@@ -107,7 +108,6 @@ class FilterScreen : BottomSheetDialogFragment(),CompoundButton.OnCheckedChangeL
 
     // This method iterates over query params list and tick mark relevant query param
     private fun setPreselected() {
-        showFilterCount(queryList.size)
         queryList.forEach {
             when(it){
                 FilteringHelper.LOOKUP_APPLE ->{
@@ -255,29 +255,25 @@ class FilterScreen : BottomSheetDialogFragment(),CompoundButton.OnCheckedChangeL
             }
         }
 
-        showFilterCount(queryList.size)
-
     }
 
     private fun setupPriceSeekbar() {
         rangeSeekBar.setCurrentValues(priceMinSelected,priceMaxSelected)
         rangeSeekBar.listenerPost = object: RangeSeekBar.OnRangeSeekBarPostListener {
             override fun onValuesChanged(minValue: Float, maxValue: Float) {
-                TODO("Not yet implemented")
+
             }
 
             override fun onValuesChanged(minValue: Int, maxValue: Int) {
                 priceMinSelected = minValue
                 priceMaxSelected = maxValue
-                txt_min.text = minValue.toString()
-                txt_max.text = maxValue.toString()
+                txt_min.text = "€ "+minValue.toString()
+                txt_max.text = "€ "+maxValue.toString()
             }
 
         }
 
     }
-
-    fun showFilterCount(count:Int) = selection_count.setText(resources.getQuantityText(R.plurals.filterCount,count))
 
     fun updateFilterParam(param:String,toRemove:Boolean){
         if(toRemove){
